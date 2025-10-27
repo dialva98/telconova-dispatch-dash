@@ -1,5 +1,9 @@
 // API configuration and utilities
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const USE_MOCK_API = import.meta.env.VITE_USE_MOCK_API !== 'false'; // Usar mock por defecto
+
+// Import mock service
+import { mockApiService } from './mockApi';
 
 export interface LoginCredentials {
   username: string;
@@ -100,6 +104,9 @@ class ApiService {
 
   // Auth endpoints
   async login(credentials: LoginCredentials): Promise<LoginResponse> {
+    if (USE_MOCK_API) {
+      return mockApiService.login(credentials);
+    }
     const response = await this.request<LoginResponse>('/auth/login', {
       method: 'POST',
       body: JSON.stringify(credentials),
@@ -109,6 +116,9 @@ class ApiService {
   }
 
   async logout(): Promise<void> {
+    if (USE_MOCK_API) {
+      return mockApiService.logout();
+    }
     this.clearToken();
   }
 
@@ -118,6 +128,9 @@ class ApiService {
     specialty?: string;
     availability?: string;
   }): Promise<Technician[]> {
+    if (USE_MOCK_API) {
+      return mockApiService.getTechnicians(filters);
+    }
     const params = new URLSearchParams();
     if (filters?.zone) params.append('zone', filters.zone);
     if (filters?.specialty) params.append('specialty', filters.specialty);
@@ -128,6 +141,9 @@ class ApiService {
   }
 
   async getTechnician(id: string): Promise<Technician> {
+    if (USE_MOCK_API) {
+      return mockApiService.getTechnician(id);
+    }
     return this.request<Technician>(`/technicians/${id}`);
   }
 
@@ -136,6 +152,9 @@ class ApiService {
     status?: string;
     zone?: string;
   }): Promise<WorkOrder[]> {
+    if (USE_MOCK_API) {
+      return mockApiService.getWorkOrders(filters);
+    }
     const params = new URLSearchParams();
     if (filters?.status) params.append('status', filters.status);
     if (filters?.zone) params.append('zone', filters.zone);
@@ -145,11 +164,17 @@ class ApiService {
   }
 
   async getWorkOrder(id: string): Promise<WorkOrder> {
+    if (USE_MOCK_API) {
+      return mockApiService.getWorkOrder(id);
+    }
     return this.request<WorkOrder>(`/work-orders/${id}`);
   }
 
   // Assignment endpoints
   async assignManually(data: AssignmentRequest): Promise<WorkOrder> {
+    if (USE_MOCK_API) {
+      return mockApiService.assignManually(data);
+    }
     return this.request<WorkOrder>('/assignments/manual', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -157,6 +182,9 @@ class ApiService {
   }
 
   async assignAutomatically(orderId: string): Promise<WorkOrder> {
+    if (USE_MOCK_API) {
+      return mockApiService.assignAutomatically(orderId);
+    }
     return this.request<WorkOrder>('/assignments/automatic', {
       method: 'POST',
       body: JSON.stringify({ orderId }),
@@ -165,6 +193,9 @@ class ApiService {
 
   // Notifications endpoint
   async sendNotification(data: NotificationData): Promise<void> {
+    if (USE_MOCK_API) {
+      return mockApiService.sendNotification(data);
+    }
     await this.request('/notifications/send', {
       method: 'POST',
       body: JSON.stringify(data),

@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "@/hooks/use-toast";
 import { apiService } from "@/lib/api";
 import { Eye, EyeOff, Shield, AlertTriangle } from "lucide-react";
+import LoginCredentials from "@/components/LoginCredentials";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -101,7 +102,8 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary via-primary-hover to-sidebar-background p-4">
-      <Card className="w-full max-w-md shadow-strong">
+      <div className="w-full max-w-md">
+      <Card className="shadow-strong">
         <CardHeader className="space-y-2 text-center">
           <div className="flex justify-center mb-4">
             <div className="p-3 bg-primary rounded-lg">
@@ -184,6 +186,9 @@ const Login = () => {
           </div>
         </CardContent>
       </Card>
+      
+      <LoginCredentials />
+      </div>
     </div>
   );
 };
