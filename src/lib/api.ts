@@ -11,8 +11,8 @@ export interface LoginCredentials {
 }
 
 export interface LoginResponse {
-  access_token: string;
-  token_type: string;
+  message: string;
+  token: string;
   user: {
     id: string;
     username: string;
@@ -95,8 +95,15 @@ class ApiService {
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'Error en la solicitud' }));
-      throw new Error(error.message || 'Error en la solicitud');
+      // Spring Boot puede devolver texto plano en algunos errores
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        const error = await response.json().catch(() => ({ message: 'Error en la solicitud' }));
+        throw new Error(error.message || 'Error en la solicitud');
+      } else {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Error en la solicitud');
+      }
     }
 
     return response.json();
@@ -107,12 +114,30 @@ class ApiService {
     if (USE_MOCK_API) {
       return mockApiService.login(credentials);
     }
-    const response = await this.request<LoginResponse>('/auth/login', {
+    
+    // Convertir formato para Spring Boot backend
+    const backendCredentials = {
+      correo: credentials.username,
+      contraseña: credentials.password
+    };
+    
+    const response = await this.request<{ message: string; token: string }>('/auth/login', {
       method: 'POST',
-      body: JSON.stringify(credentials),
+      body: JSON.stringify(backendCredentials),
     });
-    this.setToken(response.access_token);
-    return response;
+    
+    this.setToken(response.token);
+    
+    // Construir respuesta en formato esperado por el frontend
+    return {
+      message: response.message,
+      token: response.token,
+      user: {
+        id: credentials.username,
+        username: credentials.username,
+        role: 'supervisor' // El backend debería devolver esto, asumimos supervisor por ahora
+      }
+    };
   }
 
   async logout(): Promise<void> {

@@ -7,8 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "@/hooks/use-toast";
 import { apiService } from "@/lib/api";
-import { Eye, EyeOff, Shield, AlertTriangle } from "lucide-react";
+import { Eye, EyeOff, AlertTriangle } from "lucide-react";
 import LoginCredentials from "@/components/LoginCredentials";
+import logo from "@/assets/logo.png";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -106,11 +107,8 @@ const Login = () => {
       <Card className="shadow-strong">
         <CardHeader className="space-y-2 text-center">
           <div className="flex justify-center mb-4">
-            <div className="p-3 bg-primary rounded-lg">
-              <Shield className="h-8 w-8 text-primary-foreground" />
-            </div>
+            <img src={logo} alt="TelcoNova SupportSuite Logo" className="h-32 w-auto" />
           </div>
-          <CardTitle className="text-2xl font-bold">TelcoNova</CardTitle>
           <CardDescription className="text-base">
             Sistema de Asignación de Técnicos
           </CardDescription>

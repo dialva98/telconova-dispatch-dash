@@ -78,8 +78,8 @@ class MockApiService {
     this.setToken(token);
 
     return {
-      access_token: token,
-      token_type: 'Bearer',
+      message: 'Login exitoso',
+      token: token,
       user: user.user,
     };
   }
