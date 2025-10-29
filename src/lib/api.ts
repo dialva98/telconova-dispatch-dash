@@ -10,6 +10,13 @@ export interface LoginCredentials {
   password: string;
 }
 
+export interface RegisterCredentials {
+  name: string;
+  role: string;
+  username: string;
+  password: string;
+}
+
 export interface LoginResponse {
   message: string;
   token: string;
@@ -18,6 +25,10 @@ export interface LoginResponse {
     username: string;
     role: string;
   };
+}
+
+export interface RegisterResponse {
+  message: string;
 }
 
 export interface Technician {
@@ -137,6 +148,29 @@ class ApiService {
         username: credentials.username,
         role: 'supervisor' // El backend debería devolver esto, asumimos supervisor por ahora
       }
+    };
+  }
+
+  async register(credentials: RegisterCredentials): Promise<RegisterResponse> {
+    if (USE_MOCK_API) {
+      return mockApiService.register(credentials);
+    }
+    
+    // Convertir formato para Spring Boot backend
+    const backendCredentials = {
+      nombre: credentials.name,
+      rol: credentials.role,
+      correo: credentials.username,
+      contraseña: credentials.password
+    };
+    
+    const response = await this.request<{ message: string }>('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(backendCredentials),
+    });
+    
+    return {
+      message: response.message
     };
   }
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -179,8 +179,16 @@ const Login = () => {
             </Button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-muted-foreground">
-            <p>Solo supervisores técnicos pueden acceder</p>
+          <div className="mt-6 text-center space-y-2">
+            <p className="text-sm text-muted-foreground">
+              Solo supervisores técnicos pueden acceder
+            </p>
+            <p className="text-sm">
+              ¿No tienes cuenta?{" "}
+              <Link to="/register" className="text-primary hover:underline font-medium">
+                Regístrate aquí
+              </Link>
+            </p>
           </div>
         </CardContent>
       </Card>

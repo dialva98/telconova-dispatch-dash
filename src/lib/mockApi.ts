@@ -1,7 +1,9 @@
 // Mock API service para desarrollo sin backend
 import { 
-  LoginCredentials, 
-  LoginResponse, 
+  LoginCredentials,
+  RegisterCredentials,
+  LoginResponse,
+  RegisterResponse,
   Technician, 
   WorkOrder,
   AssignmentRequest,
@@ -81,6 +83,22 @@ class MockApiService {
       message: 'Login exitoso',
       token: token,
       user: user.user,
+    };
+  }
+
+  async register(credentials: RegisterCredentials): Promise<RegisterResponse> {
+    await simulateDelay(800);
+    
+    // Verificar si el usuario ya existe
+    const existingUser = mockUsers[credentials.username as keyof typeof mockUsers];
+    if (existingUser) {
+      throw new Error('User with that email already exists');
+    }
+    
+    // Simular registro exitoso
+    console.log('Mock: Usuario registrado:', credentials.username);
+    return {
+      message: 'User registered'
     };
   }
 
