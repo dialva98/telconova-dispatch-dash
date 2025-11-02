@@ -218,7 +218,6 @@ Proyecto desarrollado durante Sprint 1 y Sprint 2 del curso.
 
 ## 🔗 Enlaces
 
-- [Backend Repository](https://github.com/codeFactory20252Feature7/telconova-07)
 - [Frontend Repository](https://github.com/DanielJimenez0429/TelconovaFront2)
 - [Mockups Figma](https://www.figma.com/design/qRPYwhJWYW5tGzBlWkxDz4/TelcoNovaF2)
 
