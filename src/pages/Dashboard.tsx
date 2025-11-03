@@ -12,7 +12,8 @@ import {
   UserCog, 
   Zap,
   TrendingUp,
-  AlertCircle
+  AlertCircle,
+  Shield
 } from "lucide-react";
 import ManualAssignment from "@/components/ManualAssignment";
 import AutomaticAssignment from "@/components/AutomaticAssignment";
@@ -106,6 +107,12 @@ const Dashboard = () => {
               <p className="text-sm font-medium">{user?.username}</p>
               <p className="text-xs text-muted-foreground capitalize">{user?.role}</p>
             </div>
+            {user?.role === 'admin' && (
+              <Button variant="outline" size="sm" onClick={() => navigate('/admin')}>
+                <Shield className="h-4 w-4 mr-2" />
+                Panel Admin
+              </Button>
+            )}
             <Button variant="outline" size="sm" onClick={handleLogout}>
               <LogOut className="h-4 w-4 mr-2" />
               Cerrar Sesión

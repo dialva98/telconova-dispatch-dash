@@ -19,6 +19,14 @@ export const mockUsers = {
       role: 'admin',
     },
   },
+  'admin@telconova.com': {
+    password: 'admin123',
+    user: {
+      id: 'adm-002',
+      username: 'admin@telconova.com',
+      role: 'admin',
+    },
+  },
 };
 
 // Técnicos mock

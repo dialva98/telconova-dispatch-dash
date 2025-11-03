@@ -70,6 +70,14 @@ export interface NotificationData {
   channels: ('email' | 'sms')[];
 }
 
+export interface TechnicianRegistration {
+  name: string;
+  email: string;
+  phone: string;
+  specialty: string;
+  zone: string;
+}
+
 class ApiService {
   private token: string | null = null;
 
@@ -258,6 +266,26 @@ class ApiService {
     await this.request('/notifications/send', {
       method: 'POST',
       body: JSON.stringify(data),
+    });
+  }
+
+  // Technician registration endpoint
+  async registerTechnician(data: TechnicianRegistration): Promise<{ message: string }> {
+    if (USE_MOCK_API) {
+      return mockApiService.registerTechnician(data);
+    }
+    
+    const backendData = {
+      nombre: data.name,
+      correo: data.email,
+      telefono: data.phone,
+      especialidad: data.specialty,
+      zona: data.zone
+    };
+    
+    return this.request<{ message: string }>('/technicians/register', {
+      method: 'POST',
+      body: JSON.stringify(backendData),
     });
   }
 }

@@ -7,7 +7,8 @@ import {
   Technician, 
   WorkOrder,
   AssignmentRequest,
-  NotificationData
+  NotificationData,
+  TechnicianRegistration
 } from './api';
 import { 
   mockUsers, 
@@ -267,6 +268,29 @@ class MockApiService {
       channels: data.channels,
       sentAt: new Date().toISOString(),
     });
+  }
+
+  // Technician registration endpoint
+  async registerTechnician(data: TechnicianRegistration): Promise<{ message: string }> {
+    await simulateDelay();
+    
+    const newTechnician: Technician = {
+      id: `tech_${Date.now()}`,
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      specialty: data.specialty,
+      zone: data.zone,
+      availability: 'available',
+      currentLoad: 0,
+      certifications: []
+    };
+    
+    this.technicians.push(newTechnician);
+    
+    return {
+      message: 'Técnico registrado exitosamente'
+    };
   }
 }
 

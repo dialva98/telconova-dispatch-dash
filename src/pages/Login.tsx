@@ -47,10 +47,11 @@ const Login = () => {
     try {
       const response = await apiService.login({ username, password });
       
-      if (response.user.role !== 'supervisor') {
+      // Admins y supervisores pueden acceder
+      if (response.user.role !== 'supervisor' && response.user.role !== 'admin') {
         toast({
           title: "Acceso denegado",
-          description: "Solo supervisores técnicos pueden acceder a este módulo.",
+          description: "Solo supervisores y administradores pueden acceder a este módulo.",
           variant: "destructive",
         });
         apiService.clearToken();
@@ -181,13 +182,7 @@ const Login = () => {
 
           <div className="mt-6 text-center space-y-2">
             <p className="text-sm text-muted-foreground">
-              Solo supervisores técnicos pueden acceder
-            </p>
-            <p className="text-sm">
-              ¿No tienes cuenta?{" "}
-              <Link to="/register" className="text-primary hover:underline font-medium">
-                Regístrate aquí
-              </Link>
+              Solo supervisores y administradores pueden acceder
             </p>
           </div>
         </CardContent>
