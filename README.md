@@ -1,7 +1,7 @@
 # Welcome to your Lovable project
 
 ## Project info
-
+**Deployment**: https://telconova-dispatch-dash.lovable.app/login 
 **URL**: https://lovable.dev/projects/d4f6218e-e82d-49ab-8b95-e136691af9ab
 
 ## How can I edit this code?
