@@ -49,23 +49,30 @@ const WorkOrdersList = ({ orders, onRefresh }: WorkOrdersListProps) => {
               Todas las órdenes del sistema ({orders.length} total)
             </CardDescription>
           </div>
-          <Button variant="outline" size="sm" onClick={onRefresh}>
-            <RefreshCw className="h-4 w-4 mr-2" />
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={onRefresh}
+            aria-label="Actualizar lista de órdenes de trabajo"
+          >
+            <RefreshCw className="h-4 w-4 mr-2" aria-hidden="true" />
             Actualizar
           </Button>
         </div>
       </CardHeader>
       <CardContent>
         {orders.length === 0 ? (
-          <p className="text-center text-muted-foreground py-8">
+          <p className="text-center text-muted-foreground py-8" role="status">
             No hay órdenes registradas
           </p>
         ) : (
-          <div className="space-y-4 max-h-[600px] overflow-y-auto">
+          <div className="space-y-4 max-h-[600px] overflow-y-auto" role="list" aria-label="Lista de órdenes de trabajo">
             {orders.map((order) => (
               <div
                 key={order.id}
                 className="p-4 border rounded-lg hover:shadow-soft transition-all"
+                role="listitem"
+                aria-label={`Orden de trabajo para ${order.clientName}, estado ${getStatusLabel(order.status)}, prioridad ${order.priority}`}
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">

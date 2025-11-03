@@ -108,7 +108,7 @@ const Login = () => {
       <Card className="shadow-strong">
         <CardHeader className="space-y-2 text-center">
           <div className="flex justify-center mb-4">
-            <img src={logo} alt="TelcoNova SupportSuite Logo" className="h-32 w-auto" />
+            <img src={logo} alt="Logo de TelcoNova SupportSuite, sistema de asignación de técnicos" className="h-32 w-auto" />
           </div>
           <CardDescription className="text-base">
             Sistema de Asignación de Técnicos
@@ -116,15 +116,15 @@ const Login = () => {
         </CardHeader>
         <CardContent>
           {isBlocked && (
-            <Alert variant="destructive" className="mb-4">
-              <AlertTriangle className="h-4 w-4" />
+            <Alert variant="destructive" className="mb-4" role="alert" aria-live="assertive">
+              <AlertTriangle className="h-4 w-4" aria-hidden="true" />
               <AlertDescription>
                 Cuenta bloqueada por {blockTimer} minutos debido a múltiples intentos fallidos.
               </AlertDescription>
             </Alert>
           )}
           
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" aria-label="Formulario de inicio de sesión">
             <div className="space-y-2">
               <Label htmlFor="username">Usuario</Label>
               <Input

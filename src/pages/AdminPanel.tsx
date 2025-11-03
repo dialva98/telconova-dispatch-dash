@@ -140,33 +140,38 @@ const AdminPanel = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b bg-card shadow-soft">
+      <header className="border-b bg-card shadow-soft" role="banner">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-primary">Panel de Administración</h1>
             <p className="text-sm text-muted-foreground">Gestión de usuarios y técnicos</p>
           </div>
-          <Button variant="outline" size="sm" onClick={() => navigate('/dashboard')}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => navigate('/dashboard')}
+            aria-label="Volver al dashboard principal"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" aria-hidden="true" />
             Volver al Dashboard
           </Button>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="container mx-auto px-4 py-8 max-w-4xl" role="main">
         <Tabs defaultValue="users" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="users" className="gap-2">
-              <UserPlus className="h-4 w-4" />
+          <TabsList className="grid w-full grid-cols-2" role="tablist" aria-label="Formularios de registro">
+            <TabsTrigger value="users" className="gap-2" aria-label="Formulario de registro de usuarios">
+              <UserPlus className="h-4 w-4" aria-hidden="true" />
               Registrar Usuario
             </TabsTrigger>
-            <TabsTrigger value="technicians" className="gap-2">
-              <Users className="h-4 w-4" />
+            <TabsTrigger value="technicians" className="gap-2" aria-label="Formulario de registro de técnicos">
+              <Users className="h-4 w-4" aria-hidden="true" />
               Registrar Técnico
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="users">
+          <TabsContent value="users" role="tabpanel" aria-label="Panel de registro de usuarios">
             <Card className="shadow-soft">
               <CardHeader>
                 <CardTitle>Registrar Nuevo Usuario</CardTitle>
@@ -175,7 +180,7 @@ const AdminPanel = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleUserSubmit} className="space-y-4">
+                <form onSubmit={handleUserSubmit} className="space-y-4" aria-label="Formulario de registro de usuario">
                   <div className="space-y-2">
                     <Label htmlFor="userName">Nombre Completo</Label>
                     <Input
@@ -184,13 +189,15 @@ const AdminPanel = () => {
                       value={userName}
                       onChange={(e) => setUserName(e.target.value)}
                       disabled={userLoading}
+                      aria-required="true"
+                      aria-label="Campo de nombre completo del usuario"
                     />
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="userRole">Rol</Label>
                     <Select value={userRole} onValueChange={setUserRole} disabled={userLoading}>
-                      <SelectTrigger id="userRole">
+                      <SelectTrigger id="userRole" aria-required="true" aria-label="Selector de rol del usuario">
                         <SelectValue placeholder="Selecciona un rol" />
                       </SelectTrigger>
                       <SelectContent>
@@ -210,6 +217,8 @@ const AdminPanel = () => {
                       value={userUsername}
                       onChange={(e) => setUserUsername(e.target.value)}
                       disabled={userLoading}
+                      aria-required="true"
+                      aria-label="Campo de correo electrónico del usuario"
                     />
                   </div>
 
@@ -223,6 +232,8 @@ const AdminPanel = () => {
                         value={userPassword}
                         onChange={(e) => setUserPassword(e.target.value)}
                         disabled={userLoading}
+                        aria-required="true"
+                        aria-label="Campo de contraseña del usuario"
                       />
                       <Button
                         type="button"
@@ -231,11 +242,12 @@ const AdminPanel = () => {
                         className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                         onClick={() => setShowUserPassword(!showUserPassword)}
                         disabled={userLoading}
+                        aria-label={showUserPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                       >
                         {showUserPassword ? (
-                          <EyeOff className="h-4 w-4" />
+                          <EyeOff className="h-4 w-4" aria-hidden="true" />
                         ) : (
-                          <Eye className="h-4 w-4" />
+                          <Eye className="h-4 w-4" aria-hidden="true" />
                         )}
                       </Button>
                     </div>
@@ -251,6 +263,8 @@ const AdminPanel = () => {
                         value={userConfirmPassword}
                         onChange={(e) => setUserConfirmPassword(e.target.value)}
                         disabled={userLoading}
+                        aria-required="true"
+                        aria-label="Campo de confirmación de contraseña"
                       />
                       <Button
                         type="button"
@@ -259,17 +273,18 @@ const AdminPanel = () => {
                         className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                         onClick={() => setShowUserConfirmPassword(!showUserConfirmPassword)}
                         disabled={userLoading}
+                        aria-label={showUserConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                       >
                         {showUserConfirmPassword ? (
-                          <EyeOff className="h-4 w-4" />
+                          <EyeOff className="h-4 w-4" aria-hidden="true" />
                         ) : (
-                          <Eye className="h-4 w-4" />
+                          <Eye className="h-4 w-4" aria-hidden="true" />
                         )}
                       </Button>
                     </div>
                   </div>
 
-                  <Button type="submit" className="w-full" disabled={userLoading}>
+                  <Button type="submit" className="w-full" disabled={userLoading} aria-label="Enviar formulario de registro de usuario">
                     {userLoading ? "Registrando..." : "Registrar Usuario"}
                   </Button>
                 </form>
@@ -277,7 +292,7 @@ const AdminPanel = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="technicians">
+          <TabsContent value="technicians" role="tabpanel" aria-label="Panel de registro de técnicos">
             <Card className="shadow-soft">
               <CardHeader>
                 <CardTitle>Registrar Nuevo Técnico</CardTitle>
@@ -286,7 +301,7 @@ const AdminPanel = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleTechnicianSubmit} className="space-y-4">
+                <form onSubmit={handleTechnicianSubmit} className="space-y-4" aria-label="Formulario de registro de técnico">
                   <div className="space-y-2">
                     <Label htmlFor="techName">Nombre Completo</Label>
                     <Input
@@ -353,7 +368,7 @@ const AdminPanel = () => {
                     </Select>
                   </div>
 
-                  <Button type="submit" className="w-full" disabled={techLoading}>
+                  <Button type="submit" className="w-full" disabled={techLoading} aria-label="Enviar formulario de registro de técnico">
                     {techLoading ? "Registrando..." : "Registrar Técnico"}
                   </Button>
                 </form>
