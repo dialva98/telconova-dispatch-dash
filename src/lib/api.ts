@@ -78,6 +78,39 @@ export interface TechnicianRegistration {
   zone: string;
 }
 
+export interface TechnicianMetrics {
+  technicianId: string;
+  technicianName: string;
+  zone: string;
+  totalOrders: number;
+  completedOrders: number;
+  avgResolutionTime: number;
+  pendingOrders: number;
+  specialty: string;
+}
+
+export interface MetricsFilters {
+  startDate?: string;
+  endDate?: string;
+  serviceType?: string;
+  zones?: string[];
+}
+
+export interface SavedReport {
+  id: string;
+  name: string;
+  filters: MetricsFilters;
+  metrics: TechnicianMetrics[];
+  generatedAt: string;
+}
+
+export interface SaveReportRequest {
+  name: string;
+  filters: MetricsFilters;
+  metrics: TechnicianMetrics[];
+  generatedAt: string;
+}
+
 class ApiService {
   private token: string | null = null;
 
@@ -323,6 +356,59 @@ class ApiService {
     return {
       message: response
     };
+  }
+
+  // Metrics endpoints
+  async getTechnicianMetrics(filters?: MetricsFilters): Promise<TechnicianMetrics[]> {
+    if (USE_MOCK_API) {
+      return mockApiService.getTechnicianMetrics(filters);
+    }
+    
+    const params = new URLSearchParams();
+    if (filters?.startDate) params.append('startDate', filters.startDate);
+    if (filters?.endDate) params.append('endDate', filters.endDate);
+    if (filters?.serviceType) params.append('serviceType', filters.serviceType);
+    if (filters?.zones) params.append('zones', filters.zones.join(','));
+
+    const query = params.toString() ? `?${params.toString()}` : '';
+    return this.request<TechnicianMetrics[]>(`/metrics/technicians${query}`);
+  }
+
+  async saveReport(data: SaveReportRequest): Promise<{ message: string; reportId: string }> {
+    if (USE_MOCK_API) {
+      return mockApiService.saveReport(data);
+    }
+    
+    return this.request<{ message: string; reportId: string }>('/metrics/reports', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async getSavedReports(): Promise<SavedReport[]> {
+    if (USE_MOCK_API) {
+      return mockApiService.getSavedReports();
+    }
+    
+    return this.request<SavedReport[]>('/metrics/reports');
+  }
+
+  async getReportById(reportId: string): Promise<SavedReport> {
+    if (USE_MOCK_API) {
+      return mockApiService.getReportById(reportId);
+    }
+    
+    return this.request<SavedReport>(`/metrics/reports/${reportId}`);
+  }
+
+  async deleteReport(reportId: string): Promise<void> {
+    if (USE_MOCK_API) {
+      return mockApiService.deleteReport(reportId);
+    }
+    
+    await this.request(`/metrics/reports/${reportId}`, {
+      method: 'DELETE',
+    });
   }
 }
 

@@ -13,7 +13,8 @@ import {
   Zap,
   TrendingUp,
   AlertCircle,
-  Shield
+  Shield,
+  BarChart3
 } from "lucide-react";
 import ManualAssignment from "@/components/ManualAssignment";
 import AutomaticAssignment from "@/components/AutomaticAssignment";
@@ -107,6 +108,15 @@ const Dashboard = () => {
               <p className="text-sm font-medium" aria-label="Nombre de usuario">{user?.username}</p>
               <p className="text-xs text-muted-foreground capitalize" aria-label="Rol del usuario">{user?.role}</p>
             </div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => navigate('/metrics')}
+              aria-label="Ir al panel de métricas"
+            >
+              <BarChart3 className="h-4 w-4 mr-2" aria-hidden="true" />
+              Métricas
+            </Button>
             {user?.role === 'admin' && (
               <Button 
                 variant="outline" 

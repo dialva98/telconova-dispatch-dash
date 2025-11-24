@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import AdminPanel from "./pages/AdminPanel";
+import MetricsPanel from "./pages/MetricsPanel";
+import ReportsHistory from "./pages/ReportsHistory";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -28,6 +30,16 @@ const App = () => (
           <Route path="/admin" element={
             <ProtectedRoute requiredRole="admin">
               <AdminPanel />
+            </ProtectedRoute>
+          } />
+          <Route path="/metrics" element={
+            <ProtectedRoute>
+              <MetricsPanel />
+            </ProtectedRoute>
+          } />
+          <Route path="/reports-history" element={
+            <ProtectedRoute>
+              <ReportsHistory />
             </ProtectedRoute>
           } />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
