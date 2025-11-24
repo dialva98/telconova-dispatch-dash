@@ -8,7 +8,11 @@ import {
   WorkOrder,
   AssignmentRequest,
   NotificationData,
-  TechnicianRegistration
+  TechnicianRegistration,
+  TechnicianMetrics,
+  MetricsFilters,
+  SavedReport,
+  SaveReportRequest,
 } from './api';
 import { 
   mockUsers, 
@@ -291,6 +295,95 @@ class MockApiService {
     return {
       message: 'Técnico registrado exitosamente'
     };
+  }
+
+  // Metrics endpoints
+  async getTechnicianMetrics(filters?: MetricsFilters): Promise<TechnicianMetrics[]> {
+    await simulateDelay();
+
+    // Calculate metrics for each technician
+    const metrics: TechnicianMetrics[] = this.technicians.map(tech => {
+      let orders = this.workOrders.filter(wo => wo.assignedTechnicianId === tech.id);
+
+      // Apply filters
+      if (filters?.startDate) {
+        orders = orders.filter(wo => new Date(wo.createdAt) >= new Date(filters.startDate!));
+      }
+      if (filters?.endDate) {
+        orders = orders.filter(wo => new Date(wo.createdAt) <= new Date(filters.endDate!));
+      }
+      if (filters?.serviceType) {
+        orders = orders.filter(wo => wo.specialty === filters.serviceType);
+      }
+      if (filters?.zones && filters.zones.length > 0) {
+        orders = orders.filter(wo => filters.zones!.includes(wo.zone));
+      }
+
+      const completedOrders = orders.filter(wo => wo.status === 'completed');
+      const pendingOrders = orders.filter(wo => wo.status === 'pending' || wo.status === 'assigned');
+
+      // Calculate average resolution time (mock calculation)
+      const avgResolutionTime = completedOrders.length > 0 
+        ? completedOrders.reduce((sum, _) => sum + Math.random() * 10 + 2, 0) / completedOrders.length
+        : 0;
+
+      return {
+        technicianId: tech.id,
+        technicianName: tech.name,
+        zone: tech.zone,
+        totalOrders: orders.length,
+        completedOrders: completedOrders.length,
+        avgResolutionTime,
+        pendingOrders: pendingOrders.length,
+        specialty: tech.specialty,
+      };
+    });
+
+    return metrics;
+  }
+
+  async saveReport(data: SaveReportRequest): Promise<{ message: string; reportId: string }> {
+    await simulateDelay();
+
+    const reportId = `REPORT-${Date.now()}`;
+    const report: SavedReport = {
+      id: reportId,
+      ...data,
+    };
+
+    // Store in localStorage
+    const savedReports = JSON.parse(localStorage.getItem('saved_reports') || '[]');
+    savedReports.push(report);
+    localStorage.setItem('saved_reports', JSON.stringify(savedReports));
+
+    return {
+      message: 'Reporte guardado exitosamente',
+      reportId,
+    };
+  }
+
+  async getSavedReports(): Promise<SavedReport[]> {
+    await simulateDelay();
+    return JSON.parse(localStorage.getItem('saved_reports') || '[]');
+  }
+
+  async getReportById(reportId: string): Promise<SavedReport> {
+    await simulateDelay();
+    const reports: SavedReport[] = JSON.parse(localStorage.getItem('saved_reports') || '[]');
+    const report = reports.find(r => r.id === reportId);
+    
+    if (!report) {
+      throw new Error('Reporte no encontrado');
+    }
+
+    return report;
+  }
+
+  async deleteReport(reportId: string): Promise<void> {
+    await simulateDelay();
+    const reports: SavedReport[] = JSON.parse(localStorage.getItem('saved_reports') || '[]');
+    const filteredReports = reports.filter(r => r.id !== reportId);
+    localStorage.setItem('saved_reports', JSON.stringify(filteredReports));
   }
 }
 
